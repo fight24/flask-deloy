@@ -1,0 +1,276 @@
+<script src="https://code.highcharts.com/highcharts.js"></script>
+<script src="https://code.highcharts.com/highcharts-more.js"></script>
+<script src="https://code.highcharts.com/modules/solid-gauge.js"></script>
+<script src="https://code.highcharts.com/modules/exporting.js"></script>
+<script src="https://code.highcharts.com/modules/export-data.js"></script>
+<script src="https://code.highcharts.com/modules/accessibility.js"></script>
+<style>
+  
+
+ 
+  .content { 
+    margin-top: 5px;
+    padding: 20px;
+  }
+  .card {
+   
+    text-align: center;
+    border-radius: 13px;
+    background:#26174de0;
+    box-shadow:  10px 10px 20px #140833,
+    -10px -10px 20px #180a3d;
+  }
+  .card-title {
+    color:#f2f6f9;
+    font-weight: bold;
+  }
+  .cards {
+    max-width: 800px;
+    margin: 0 auto;
+    display: grid; grid-gap: 2rem;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  }
+
+  @media screen and (max-width: 768px) {
+  .cards{
+    margin: 80px auto;
+   }
+  }
+
+  #mpu-status{
+    filter: brightness(1000%) contrast(1000%) saturate(1000%);
+  }
+  </style>
+  <div class="content">
+    <div class="cards">
+      <div class="card">
+        <figure class="highcharts-figure">
+          <div id="container-speed" class="chart-container"></div>
+        </figure>
+      </div>
+      <div class="card">
+        <figure class="highcharts-figure">
+          <div id="container-rpm" class="chart-container"></div>
+        </figure>
+      </div>
+    </div>
+    </div>
+  
+
+<style>
+  .highcharts-background{
+ fill: rgb(22, 9, 56);
+}
+  .highcharts-figure .chart-container {
+    width: 300px;
+    height: 200px;
+    float: left;
+  }
+  
+  .highcharts-figure,
+  .highcharts-data-table table {
+    width: 600px;
+    margin: 0 auto;
+  }
+  
+  .highcharts-data-table table {
+    font-family: Verdana, sans-serif;
+    border-collapse: collapse;
+    border: 1px solid #ebebeb00;
+    margin: 10px auto;
+    text-align: center;
+    width: 100%;
+    max-width: 500px;
+  }
+  
+  .highcharts-data-table caption {
+    padding: 1em 0;
+    font-size: 1.2em;
+    color: rgb(252, 249, 249);
+  }
+  
+  .highcharts-data-table th {
+    font-weight: 600;
+    padding: 0.5em;
+  }
+  
+  .highcharts-data-table td,
+  .highcharts-data-table th,
+  .highcharts-data-table caption {
+    padding: 0.5em;
+  }
+  
+  .highcharts-data-table thead tr,
+  .highcharts-data-table tr:nth-child(even) {
+    background: #fefefe;
+  }
+  
+  .highcharts-data-table tr:hover {
+    background: #f7f8fa;
+  }
+  
+  @media (max-width: 600px) {
+    .highcharts-figure,
+    .highcharts-data-table table {
+      width: 100%;
+    }
+  
+    .highcharts-figure .chart-container {
+      width: 300px;
+      float: none;
+      margin: 0 auto;
+    }
+  }
+</style>
+<script>
+  var gaugeOptions = {
+    chart: {
+      type: 'solidgauge'
+    },
+  
+    title: null,
+  
+    pane: {
+      center: ['50%', '85%'],
+      size: '140%',
+      startAngle: -90,
+      endAngle: 90,
+      background: {
+        backgroundColor:
+          Highcharts.defaultOptions.legend.backgroundColor || '#fff',
+        innerRadius: '60%',
+        outerRadius: '100%',
+        shape: 'arc'
+      }
+    },
+  
+    exporting: {
+      enabled: false
+    },
+  
+    tooltip: {
+      enabled: false
+    },
+  
+    // the value axis
+    yAxis: {
+      stops: [
+        [0.1, '#55BF3B'], // green
+        [0.5, '#DDDF0D'], // yellow
+        [0.9, '#DF5353'] // red
+      ],
+      lineWidth: 0,
+      tickWidth: 0,
+      minorTickInterval: null,
+      tickAmount: 2,
+      title: {
+        y: -70
+      },
+      labels: {
+        y: 16
+      }
+    },
+  
+    plotOptions: {
+      solidgauge: {
+        dataLabels: {
+          y: 5,
+          borderWidth: 0,
+          useHTML: true
+        }
+      }
+    }
+  };
+  
+  // The speed gauge
+  var chartSpeed = Highcharts.chart('container-speed', Highcharts.merge(gaugeOptions, {
+    yAxis: {
+      min: 0,
+      max: 200,
+      title: {
+        text: 'Speed',
+      }
+    },
+  
+    credits: {
+      enabled: false
+    },
+  
+    series: [{
+      name: 'Speed',
+      data: [80],
+      dataLabels: {
+        format:
+          '<div style="text-align:center;color:#fff">' +
+          '<span style="font-size:25px">{y}</span><br/>' +
+          '<span style="font-size:12px;opacity:0.4">km/h</span>' +
+          '</div>'
+      },
+      tooltip: {
+        valueSuffix: ' km/h'
+      }
+    }]
+  
+  }));
+  
+  // The RPM gauge
+  var chartRpm = Highcharts.chart('container-rpm', Highcharts.merge(gaugeOptions, {
+    yAxis: {
+      min: 0,
+      max: 5,
+      title: {
+        text: 'RPM'
+      }
+    },
+  
+    series: [{
+      name: 'RPM',
+      data: [1],
+      dataLabels: {
+        format:
+          '<div style="text-align:center;color:#fff">' +
+          '<span style="font-size:25px">{y:.1f}</span><br/>' +
+          '<span style="font-size:12px;opacity:0.4">' +
+          '* 1000 / min' +
+          '</span>' +
+          '</div>'
+      },
+      tooltip: {
+        valueSuffix: ' revolutions/min'
+      }
+    }]
+  
+  }));
+  // Bring life to the dials
+  setInterval(function () {
+    // Speed
+    var point,
+      newVal,
+      inc;
+ 
+    if (chartSpeed) { /*
+      point = chartSpeed.series[0].points[0];
+      inc = Math.round((Math.random() - 0.5) * 100);
+      newVal = point.y + inc;
+  
+      if (newVal < 0 || newVal > 200) {
+        newVal = point.y - inc;
+      }
+  */
+      point.update(newVal);
+    }
+  
+    // RPM
+    if (chartRpm) {
+      point = chartRpm.series[0].points[0];
+      inc = Math.random() - 0.5;
+      newVal = point.y + inc;
+  
+      if (newVal < 0 || newVal > 5) {
+        newVal = point.y - inc;
+      }
+  
+      point.update(newVal);
+    }
+  }, 2000);
+</script>
