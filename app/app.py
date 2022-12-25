@@ -5,12 +5,12 @@ import eventlet
 import json
 from flask_mqtt import Mqtt
 from flask_socketio import SocketIO
-from flask_ngrok import run_with_ngrok
+
 
 app = create_app()
-run_with_ngrok(app)
+
 eventlet.monkey_patch()
-app.config['SECRET'] = 'my secret key'
+app.config['SECRET_KEY'] = '4a66d6e33d1dd6bf1c4e04b1acd45d64'
 app.config['TEMPLATES_AUTO_RELOAD'] = True
 app.config['MQTT_BROKER_URL'] = 'g7616f69-internet-facing-0f07000e0e8c39f1.elb.ap-northeast-1.amazonaws.com'
 app.config['MQTT_BROKER_PORT'] = 1883
