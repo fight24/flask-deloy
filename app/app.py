@@ -64,6 +64,7 @@ def handle_mqtt_message(client, userdata, message):
         ) 
     topic= data['topic']
     message = data['payload']
+    # Auto save data
     if topic != None or message != None:
         with app.app_context():
             new_data = data_sensor(topic=topic,message=message)
